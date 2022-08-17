@@ -1,0 +1,10 @@
+
+
+gcloud beta compute instance-groups managed  instance-configs list  instance-group-1  --region europe-west4
+
+gcloud beta compute instance-groups managed create instance-group-1 --template instance-template-1 --size 0 --region europe-west4 --stateful-internal-ip enabled,interface-name=nic0,auto-delete=never --stateful-external-ip enabled,interface-name=nic0,auto-delete=never --instance-redistribution-type NONE
+
+
+gcloud beta compute instance-groups managed create-instance instance-group-1 --region europe-west4      --instance instagram     --stateful-external-ip address=34.91.225.34,interface-name=nic0,auto-delete=never  --stateful-metadata=vpn-endpoint="192.168.10.10",dst_range="200.200.200.200"
+
+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
