@@ -3,25 +3,25 @@ provider "google" {
   region      = "europe-west4"
 }
 
-resource "google_compute_instance_group" "staging_group" {
-  name      = "staging-instance-group"
-  zone         = "europe-west4-a"
-  instances = [google_compute_instance.staging_vm.id]
-
-  named_port {
-    name = "http"
-    port = "8080"
-  }
-
-  named_port {
-    name = "https"
-    port = "8443"
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+#resource "google_compute_instance_group" "staging_group" {
+#  name      = "example-group"
+#  zone         = "europe-west4-a"
+#  instances = [google_compute_instance.staging_vm.id]
+#
+#  named_port {
+#    name = "http"
+#    port = "8080"
+#  }
+#
+#  named_port {
+#    name = "https"
+#    port = "8443"
+#  }
+#
+#  lifecycle {
+#    create_before_destroy = true
+#  }
+#}
 
 data "google_compute_image" "debian_image" {
   family  = "debian-11"
@@ -63,6 +63,13 @@ resource "google_compute_https_health_check" "staging_health" {
   request_path = "/health_check"
 }
 
+resource "google_compute_instance_group_manager" "instance_group_manager" {
+  name               = "instance-group-manager"
+  instance_template  = "${google_compute_instance_template.instance_template.self_link}"
+  base_instance_name = "instance-group-manager"
+  zone               = "europe-west4-a"
+  target_size        = "1"
+}
 
 
 #
@@ -95,24 +102,24 @@ resource "google_compute_https_health_check" "staging_health" {
 #}
 
 #
-#resource "google_compute_instance_group" "staging_group" {
-#  name      = "staging-instance-group"
-#  zone      = "europe-west4-a"
-#  instances = [google_compute_instance.staging_vm.id]
-#  named_port {
-#    name = "http"
-#    port = "8080"
-#  }
-#
-#  named_port {
-#    name = "https"
-#    port = "8443"
-#  }
-#
-#  lifecycle {
-#    create_before_destroy = true
-#  }
-#}
+resource "google_compute_instance_group" "staging_group" {
+  name      = "staging-instance-group"
+  zone      = "europe-west4-a"
+  instances = [google_compute_instance.staging_vm.id]
+  named_port {
+    name = "http"
+    port = "8080"
+  }
+
+  named_port {
+    name = "https"
+    port = "8443"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
 #
 #data "google_compute_image" "debian_image" {
 #  family  = "debian-10"
